@@ -94,21 +94,6 @@ class PositionalEncoding(nn.Module):
 
         return self.dropout(x)
  
-class LearnedPositionalEncoding(nn.Module):
-    def __init__(self, d_model, dropout=0.1, max_len=100):
-        super(LearnedPositionalEncoding, self).__init__()
-        self.dropout = nn.Dropout(p=dropout)
-
-        self.pos_embed = nn.Embedding(max_len, d_model)
-        self.layernorm = LayerNorm(d_model)
-
-    def forward(self, x):
-        seq_len = x.size(0)
-        pos = torch.arange(seq_len, dtype=torch.long, device=x.device)
-        pos = pos.unsqueeze(-1).expand(x.size()[:2])
-        x = x + self.pos_embed(pos)
-        return self.dropout(self.layernorm(x))
-
 class LayerNorm(nn.Module):
     "A layernorm module in the TF style (epsilon inside the square root)."
     def __init__(self, d_model, variance_epsilon=1e-12):

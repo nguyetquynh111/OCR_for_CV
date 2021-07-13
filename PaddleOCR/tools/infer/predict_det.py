@@ -27,7 +27,6 @@ import sys
 
 import tools.infer.utility as utility
 from ppocr.utils.logging import get_logger
-from ppocr.utils.utility import get_image_file_list, check_and_read_gif
 from ppocr.data import create_operators, transform
 from ppocr.postprocess import build_post_process
 
@@ -67,33 +66,6 @@ class TextDetector(object):
             postprocess_params["use_dilation"] = args.use_dilation
             if hasattr(args, "det_db_score_mode"):
                 postprocess_params["score_mode"] = args.det_db_score_mode
-
-        elif self.det_algorithm == "EAST":
-            postprocess_params['name'] = 'EASTPostProcess'
-            postprocess_params["score_thresh"] = args.det_east_score_thresh
-            postprocess_params["cover_thresh"] = args.det_east_cover_thresh
-            postprocess_params["nms_thresh"] = args.det_east_nms_thresh
-        elif self.det_algorithm == "SAST":
-            pre_process_list[0] = {
-                'DetResizeForTest': {
-                    'resize_long': args.det_limit_side_len
-                }
-            }
-            postprocess_params['name'] = 'SASTPostProcess'
-            postprocess_params["score_thresh"] = args.det_sast_score_thresh
-            postprocess_params["nms_thresh"] = args.det_sast_nms_thresh
-            self.det_sast_polygon = args.det_sast_polygon
-            if self.det_sast_polygon:
-                postprocess_params["sample_pts_num"] = 6
-                postprocess_params["expand_scale"] = 1.2
-                postprocess_params["shrink_ratio_of_width"] = 0.2
-            else:
-                postprocess_params["sample_pts_num"] = 2
-                postprocess_params["expand_scale"] = 1.0
-                postprocess_params["shrink_ratio_of_width"] = 0.3
-        else:
-            logger.info("unknown det_algorithm:{}".format(self.det_algorithm))
-            sys.exit(0)
 
         self.preprocess_op = create_operators(pre_process_list)
         self.postprocess_op = build_post_process(postprocess_params)
@@ -197,32 +169,32 @@ class TextDetector(object):
         return dt_boxes, elapse
 
 
-if __name__ == "__main__":
-    args = utility.parse_args()
-    image_file_list = get_image_file_list(args.image_dir)
-    text_detector = TextDetector(args)
-    count = 0
-    total_time = 0
-    draw_img_save = "./inference_results"
-    if not os.path.exists(draw_img_save):
-        os.makedirs(draw_img_save)
-    for image_file in image_file_list:
-        img, flag = check_and_read_gif(image_file)
-        if not flag:
-            img = cv2.imread(image_file)
-        if img is None:
-            logger.info("error in loading image:{}".format(image_file))
-            continue
-        dt_boxes, elapse = text_detector(img)
-        if count > 0:
-            total_time += elapse
-        count += 1
-        logger.info("Predict time of {}: {}".format(image_file, elapse))
-        src_im = utility.draw_text_det_res(dt_boxes, image_file)
-        img_name_pure = os.path.split(image_file)[-1]
-        img_path = os.path.join(draw_img_save,
-                                "det_res_{}".format(img_name_pure))
-        cv2.imwrite(img_path, src_im)
-        logger.info("The visualized image saved in {}".format(img_path))
-    if count > 1:
-        logger.info("Avg Time: {}".format(total_time / (count - 1)))
+# if __name__ == "__main__":
+#     args = utility.parse_args()
+#     image_file_list = get_image_file_list(args.image_dir)
+#     text_detector = TextDetector(args)
+#     count = 0
+#     total_time = 0
+#     draw_img_save = "./inference_results"
+#     if not os.path.exists(draw_img_save):
+#         os.makedirs(draw_img_save)
+#     for image_file in image_file_list:
+#         img, flag = check_and_read_gif(image_file)
+#         if not flag:
+#             img = cv2.imread(image_file)
+#         if img is None:
+#             logger.info("error in loading image:{}".format(image_file))
+#             continue
+#         dt_boxes, elapse = text_detector(img)
+#         if count > 0:
+#             total_time += elapse
+#         count += 1
+#         logger.info("Predict time of {}: {}".format(image_file, elapse))
+#         src_im = utility.draw_text_det_res(dt_boxes, image_file)
+#         img_name_pure = os.path.split(image_file)[-1]
+#         img_path = os.path.join(draw_img_save,
+#                                 "det_res_{}".format(img_name_pure))
+#         cv2.imwrite(img_path, src_im)
+#         logger.info("The visualized image saved in {}".format(img_path))
+#     if count > 1:
+#         logger.info("Avg Time: {}".format(total_time / (count - 1)))

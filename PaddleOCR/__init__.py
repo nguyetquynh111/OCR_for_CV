@@ -13,5 +13,5 @@
 # limitations under the License.
 
 __all__ = ['PaddleOCR', 'draw_ocr']
-from .paddleocr import PaddleOCR
-from .tools.infer.utility import draw_ocr
+# from .paddleocr import PaddleOCR
+# from .tools.infer.utility import draw_ocr

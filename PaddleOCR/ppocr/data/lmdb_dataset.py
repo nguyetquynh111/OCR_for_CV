@@ -14,7 +14,7 @@
 import numpy as np
 import os
 from paddle.io import Dataset
-import lmdb
+# import lmdb
 import cv2
 
 from .imaug import transform, create_operators

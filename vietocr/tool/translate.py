@@ -2,7 +2,7 @@ import torch
 import numpy as np
 import math
 from PIL import Image
-from torch.nn.functional import log_softmax, softmax
+from torch.nn.functional import softmax
 
 from vietocr.model.transformerocr import VietOCR
 from vietocr.model.vocab import Vocab
@@ -93,15 +93,3 @@ def process_input(image, image_height, image_min_width, image_max_width):
     img = img[np.newaxis, ...]
     img = torch.FloatTensor(img)
     return img
-
-def predict(filename, config):
-    img = Image.open(filename)
-    img = process_input(img)
-
-    img = img.to(config['device'])
-
-    model, vocab = build_model(config)
-    s = translate(img, model)[0].tolist()
-    s = vocab.decode(s)
-    
-    return s

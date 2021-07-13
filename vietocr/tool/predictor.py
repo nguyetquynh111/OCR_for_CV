@@ -1,4 +1,4 @@
-from vietocr.tool.translate import build_model, translate, process_input, predict
+from vietocr.tool.translate import build_model, translate, process_input
 import torch
 
 class Predictor():

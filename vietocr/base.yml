@@ -55,12 +55,4 @@ predictor:
     # disable or enable beamsearch while prediction, use beamsearch will be slower
     beamsearch: False
 
-quiet: False 
-./vietocr/vgg_seq2seq
-...
-./vietocr/vgg_seq2seq
-...
-./vietocr/vgg_seq2seq
-...
-./vietocr/vgg_seq2seq
-...
+quiet: False

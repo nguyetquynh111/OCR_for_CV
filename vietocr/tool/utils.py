@@ -4,12 +4,6 @@ import numpy as np
 import uuid
 import requests
 
-def download_config(id):
-    url = 'https://raw.githubusercontent.com/pbcquoc/vietocr/master/config/{}'.format(id)
-    r = requests.get(url)
-    config = yaml.safe_load(r.text)
-    return config
-
 def compute_accuracy(ground_truth, predictions, mode='full_sequence'):
     """
     Computes accuracy

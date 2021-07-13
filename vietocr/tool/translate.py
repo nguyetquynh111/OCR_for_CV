@@ -24,8 +24,6 @@ def translate(img, model, max_seq_length=128, sos_token=1, eos_token=2):
 
             tgt_inp = torch.LongTensor(translated_sentence).to(device)
             
-#            output = model(img, tgt_inp, tgt_key_padding_mask=None)
-#            output = model.transformer(src, tgt_inp, tgt_key_padding_mask=None)
             output, memory = model.transformer.forward_decoder(tgt_inp, memory)
             output = softmax(output, dim=-1)
             output = output.to('cpu')

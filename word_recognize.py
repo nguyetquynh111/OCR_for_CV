@@ -8,6 +8,7 @@ Original file is located at
 """
 
 from google.colab import drive
+
 drive.mount('/content/drive')
 
 cd /content/drive/MyDrive/image-cv
@@ -16,23 +17,22 @@ cd /content/drive/MyDrive/image-cv
 
 """# Library"""
 
-import matplotlib.pyplot as plt
-from PIL import Image
-
-from vietocr.tool.predictor import Predictor
-from vietocr.tool.config import Cfg
-from paddleocr import PaddleOCR
-
-import time
 import io
-import cv2
-import numpy as np
-from PIL import Image
 import sys
-import pandas as pd
+import time
+
+import cv2
 import fitz
-from tqdm import tqdm
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import yaml
+from paddleocr import PaddleOCR
+from PIL import Image
+from tqdm import tqdm
+
+from vietocr.tool.config import Cfg
+from vietocr.tool.predictor import Predictor
 
 config = Cfg.load_config_from_name('./vietocr/', 'vgg_seq2seq')
 config['predictor']['beamsearch']=False
@@ -115,6 +115,7 @@ def pdfimage2text(file):
   return block_df
 
 import time
+
 start = time.time()
 pdf_path = './cvSample4.pdf'
 print(pdfimage2text(pdf_path))

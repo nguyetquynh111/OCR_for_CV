@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torch.optim as optim
 
 
 class Encoder(nn.Module):
@@ -44,7 +43,6 @@ class Attention(nn.Module):
         outputs: batch_size x src_len
         """
 
-        batch_size = encoder_outputs.shape[1]
         src_len = encoder_outputs.shape[0]
 
         hidden = hidden.unsqueeze(1).repeat(1, src_len, 1)

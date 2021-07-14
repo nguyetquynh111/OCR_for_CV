@@ -37,7 +37,6 @@ class OCR(object):
         # Get bbox
         boxes = []
         list_text = []
-        img = Image.fromarray(img)
         # Create df
         for line in result:
             bbox = (line[0][0] - 5, line[0][1] - 5, line[2][0] + 5, line[2][1] + 5)
